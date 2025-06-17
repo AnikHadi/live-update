@@ -1,5 +1,4 @@
 "use client";
-import { postPayData } from "@/api/pay/route";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,9 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
 
 export default function InputData() {
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     const formdata = event.target;
     const name = formdata.name.value;
@@ -26,12 +26,16 @@ export default function InputData() {
       amount,
     };
 
-    const response = postPayData(data);
-    const res = response.json();
+    const response = await axios.post("/api/pay-amount", data);
+    // const res = response.json();
 
-    console.log(res);
+    console.log(response);
     // formdata.reset();
   };
+
+  const data = axios.get("/api/pay-amount");
+
+  console.log(data);
 
   return (
     <div className="flex min-h-screen items-center justify-center">

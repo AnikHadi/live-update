@@ -33,10 +33,6 @@ export default function InputData() {
     // formdata.reset();
   };
 
-  const data = axios.get("/api/pay-amount");
-
-  console.log(data);
-
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-sm">

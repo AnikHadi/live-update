@@ -11,8 +11,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function InputData() {
+  const [socket, setSocket] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState("connecting...");
+
+  useEffect(() => {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(`${protocol}//${window.location.host}/api/ws`);
+
+    ws.onopen = () => {
+      setConnectionStatus("connected");
+      setSocket(ws);
+    };
+
+    ws.onclose = () => {
+      setConnectionStatus("disconnected");
+    };
+
+    const pingInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(`{"event": "ping"}`);
+      }
+    }, 29000);
+
+    return () => {
+      clearInterval(pingInterval);
+      if (ws) ws.close();
+    };
+  }, []);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const formdata = event.target;
@@ -20,17 +50,25 @@ export default function InputData() {
     const phone = formdata.phone.value;
     const amount = Number(formdata.amount.value);
 
+    if (!name || !phone || !amount) {
+      return alert("Please filles all information!");
+    }
+
     const data = {
       name,
       phone,
       amount,
     };
 
-    const response = await axios.post("/api/pay-amount", data);
-    // const res = response.json();
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: "NEW_DATA", data }));
+      const response = await axios.post("/api", data);
 
-    console.log(response);
-    // formdata.reset();
+      if (response.status === 201) {
+        formdata.reset();
+        toast.success("Data saved successfully!");
+      }
+    }
   };
 
   return (

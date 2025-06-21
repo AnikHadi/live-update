@@ -62,7 +62,7 @@ export default function InputData() {
 
     if (socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: "NEW_DATA", data }));
-      const response = await axios.post("/api", data);
+      const response = await axios.post("/api/pay", data);
 
       if (response.status === 201) {
         formdata.reset();

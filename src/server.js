@@ -21,7 +21,7 @@ nextApp.prepare().then(() => {
     console.log("> Client connected");
 
     ws.on("message", (message, isBinary) => {
-      console.log("> Message received:", message);
+      // console.log("> Message received:", message);
       clients.forEach((client) => {
         if (
           client.readyState === WebSocket.OPEN &&
@@ -33,7 +33,7 @@ nextApp.prepare().then(() => {
     });
 
     ws.on("close", () => {
-      clients.delete(ws);
+      // clients.delete(ws);
       console.log("> Client disconnected");
     });
   });

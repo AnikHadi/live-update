@@ -17,7 +17,7 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/api");
+      const response = await axios.get("/api/pay");
       if (response?.statusText === "OK") {
         const result = response.data;
         setData(result);
@@ -120,7 +120,10 @@ export default function Home() {
               ?.toString()
               ?.split("")
               ?.map((item, index) => (
-                <span className="w-full border text-center text-2xl">
+                <span
+                  key={index}
+                  className="w-full border text-center text-2xl"
+                >
                   {item}
                 </span>
               ))}

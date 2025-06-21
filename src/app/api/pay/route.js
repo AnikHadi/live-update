@@ -6,7 +6,6 @@ export async function GET() {
   await connectToDatabase();
   try {
     const data = await PayAmount.find().sort({ createdAt: -1 });
-    console.log("data", data);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
@@ -24,10 +23,13 @@ export async function POST(request) {
     await newData.save();
 
     return NextResponse.json(
-      { message: "Data saved successfully", data: newData },
+      { message: "Data saved successfully", data: newData, success: true },
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json({ error: "Failed to save data" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to save data", success: false },
+      { status: 500 }
+    );
   }
 }

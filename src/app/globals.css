@@ -158,3 +158,18 @@
     transform: translateX(5px);
   }
 }
+
+th,
+td {
+  /* padding-top: 10px; */
+  padding: 8px 0px;
+  text-align: start;
+  /* padding-left: 30px; */
+  /* padding-right: 40px; */
+}
+/* th {
+  text-align: center;
+}
+td {
+  
+} */

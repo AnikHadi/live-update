@@ -15,7 +15,6 @@ export async function imageUpload(file) {
       }
     );
     const data = await res.json();
-    console.log(data);
     return data.url;
   } catch (error) {
     return error;

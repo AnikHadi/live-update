@@ -27,7 +27,6 @@ export default function InputGuestData() {
       let imageUploadUrl;
 
       if (!imageUploadUrl) {
-        console.log(imageUploadUrl);
         imageUploadUrl = await imageUpload(imageFiles);
       }
       const data = {
@@ -35,7 +34,6 @@ export default function InputGuestData() {
         phone,
         imageUrl: imageUploadUrl,
       };
-      console.log(imageUploadUrl);
 
       const response = await axios.post("/api/guest", data);
       if (response.status === 201) {

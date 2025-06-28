@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 export async function imageUpload(file) {
   try {
     const imageData = new FormData();
@@ -33,15 +35,13 @@ export async function createPayAmount(formData) {
   // Revalidate cache
 }
 
-export const createGuest = async (formData) => {
-  const name = formData.get("name");
-  const phone = formData.get("phone");
-  const imageUrl = formData.get("imageUrl");
-
+export const createGuest = async (guestData) => {
   const res = await fetch("http://localhost:3000/api/guest", {
     method: "POST",
-    body: JSON.stringify({ name, phone, imageUrl }),
+    body: JSON.stringify({ ...guestData }),
   });
+
+  revalidatePath("/dashboard");
   return await res.json();
 };
 
@@ -58,5 +58,8 @@ export const deleteGuest = async (id) => {
   const res = await fetch(`http://localhost:3000/api/guest/${id}`, {
     method: "DELETE",
   });
+  revalidatePath("/dashboard");
   return await res.json();
 };
+
+export const createGuestNew = async (guest) => {};

@@ -1,6 +1,5 @@
 "use client";
-import { imageUpload } from "@/lib/actions";
-import axios from "axios";
+import { createGuest, imageUpload } from "@/lib/actions";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "./ui/button";
@@ -14,6 +13,7 @@ export default function InputGuestData() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
     const formdata = event.target;
     const name = formdata.name.value;
     const phone = formdata.phone.value;
@@ -35,8 +35,16 @@ export default function InputGuestData() {
         imageUrl: imageUploadUrl,
       };
 
-      const response = await axios.post("/api/guest", data);
-      if (response.status === 201) {
+      // const response = await axios.post("/api/guest", data);
+      // if (response.status === 201) {
+      //   formdata.reset();
+      //   formdata.imageUrl.value = "";
+      //   setSelectedFile(null);
+      //   toast.success("Data saved successfully!");
+      //   revalidatePath("/dashboard");
+      // }
+      const response = await createGuest(data);
+      if (response.success) {
         formdata.reset();
         formdata.imageUrl.value = "";
         setSelectedFile(null);
@@ -71,10 +79,11 @@ export default function InputGuestData() {
             <div className="grid min-w-sm w-full items-center gap-1.5">
               <Label htmlFor="phone">Phone Number</Label>
               <Input
+                type="tel"
                 id="phone"
                 name="phone"
                 placeholder="Phone Number"
-                type="tel"
+                pattern="[0-9]{3}[0-9]{4}[0-9]{4}"
                 className="w-full"
               />
             </div>

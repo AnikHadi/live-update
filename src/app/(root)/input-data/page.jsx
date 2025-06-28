@@ -17,7 +17,9 @@ import { toast } from "react-toastify";
 export default function InputData() {
   const [socket, setSocket] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState("connecting...");
+  const [userData, setUserData] = useState([]);
 
+  // Socket Connection
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const ws = new WebSocket(`${protocol}//${window.location.host}/api/ws`);
@@ -42,6 +44,24 @@ export default function InputData() {
       if (ws) ws.close();
     };
   }, []);
+
+  // Get Guest Data
+  useEffect(() => {
+    const fetchGuestData = async () => {
+      try {
+        const response = await axios.get("/api/guest");
+        if (response?.statusText === "OK") {
+          const result = response.data;
+          setUserData(result);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchGuestData();
+  }, []);
+
+  console.log(userData);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -85,7 +105,18 @@ export default function InputData() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" type="text" placeholder="John Doe" required />
+                <Input
+                  id="name"
+                  list="names"
+                  type="text"
+                  placeholder="John Doe"
+                  required
+                />
+                <datalist id="names">
+                  {userData?.map((guest) => (
+                    <option key={guest._id} value={guest.name} />
+                  ))}
+                </datalist>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="phone">Phone Number</Label>

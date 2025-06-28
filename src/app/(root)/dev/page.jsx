@@ -1,3 +1,3 @@
 export default function DevInfo() {
-  return <div>Dev Info</div>;
+  return <div>This is Hadiuzzaman Anik.</div>;
 }

@@ -1,6 +1,5 @@
 import connectToDatabase from "@/lib/mongoose.js";
 import User from "@/models/user.model.js";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
@@ -35,7 +34,6 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     return NextResponse.json(
       { message: "Login successfully", user: user, success: true },
